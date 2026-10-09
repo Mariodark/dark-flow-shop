@@ -1,0 +1,56 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>DARK FLOW — Move Different</title>
+<style>
+*{box-sizing:border-box}body{margin:0;background:#070707;color:#fff;font-family:Arial,sans-serif}
+header{position:sticky;top:0;z-index:10;background:#070707ee;border-bottom:1px solid #292929}
+nav{max-width:1100px;margin:auto;padding:16px 20px;display:flex;justify-content:space-between;align-items:center}
+.logo{font-weight:900;letter-spacing:4px}.navbtn{background:#151515;color:#fff;border:1px solid #444;border-radius:9px;padding:10px 14px}
+.hero{max-width:1100px;margin:auto;padding:45px 20px 25px;text-align:center}.hero img{width:100%;max-height:420px;object-fit:cover;border-radius:18px;border:1px solid #292929}.hero h1{font-size:clamp(40px,8vw,80px);letter-spacing:7px;margin:28px 0 8px}.hero p{color:#aaa;letter-spacing:5px}
+.shop{max-width:1100px;margin:auto;padding:35px 20px 80px}.grid{display:grid;grid-template-columns:repeat(3,1fr);gap:20px}
+.card{background:#111;border:1px solid #292929;border-radius:16px;padding:14px}.productpic{height:270px;border-radius:12px;background:linear-gradient(145deg,#1d1d1d,#070707);display:flex;align-items:center;justify-content:center;font-size:85px}.card h2{font-size:19px}.price{font-size:20px;font-weight:bold;margin:8px 0 16px}
+select,.add,.checkout{width:100%;padding:12px;border-radius:9px;margin-top:8px}.add,.checkout{background:#fff;color:#000;border:0;font-weight:800;cursor:pointer}
+.cart{position:fixed;right:18px;bottom:18px;width:min(390px,calc(100% - 36px));background:#fff;color:#000;border-radius:16px;padding:18px;z-index:20;display:none;box-shadow:0 15px 50px #000}.cart h3{margin-top:0}.item{padding:9px 0;border-bottom:1px solid #ddd}.small{font-size:13px;color:#666}.total{font-size:20px;font-weight:900;margin-top:14px}
+.checkoutbox{display:none;margin-top:15px;border-top:1px solid #ddd;padding-top:12px}.checkoutbox input{width:100%;padding:11px;margin:5px 0;border:1px solid #ccc;border-radius:8px}
+footer{border-top:1px solid #222;text-align:center;padding:30px;color:#777}
+@media(max-width:760px){.grid{grid-template-columns:1fr}.productpic{height:240px}}
+</style>
+</head>
+<body>
+<header><nav><div class="logo">DARK FLOW</div><button class="navbtn" onclick="toggleCart()">🛒 Warenkorb <span id="count">0</span></button></nav></header>
+<section class="hero">
+<img src="dark-flow-brand.png" alt="DARK FLOW">
+<h1>DARK FLOW</h1><p>MOVE DIFFERENT.</p>
+</section>
+<section class="shop">
+<h2>COLLECTION 01</h2>
+<div class="grid">
+<article class="card"><div class="productpic">👖</div><h2>Baggy Jogger</h2><div class="small">Schwarz / Anthrazit · Heavy Streetwear Fit</div><div class="price">59,90 €</div><select id="jogger"><option>Größe wählen</option><option>XS</option><option>S</option><option>M</option><option>L</option><option>XL</option><option>XXL</option></select><button class="add" onclick="add('Baggy Jogger',59.90,'jogger')">IN DEN WARENKORB</button></article>
+<article class="card"><div class="productpic">🧥</div><h2>Oversized Hoodie</h2><div class="small">Schwarz / Anthrazit · Premium 400 GSM</div><div class="price">69,90 €</div><select id="hoodie"><option>Größe wählen</option><option>XS</option><option>S</option><option>M</option><option>L</option><option>XL</option><option>XXL</option></select><button class="add" onclick="add('Oversized Hoodie',69.90,'hoodie')">IN DEN WARENKORB</button></article>
+<article class="card"><div class="productpic">👕</div><h2>Oversized T-Shirt</h2><div class="small">Schwarz / Anthrazit · 240 GSM Baumwolle</div><div class="price">34,90 €</div><select id="shirt"><option>Größe wählen</option><option>XS</option><option>S</option><option>M</option><option>L</option><option>XL</option><option>XXL</option></select><button class="add" onclick="add('Oversized T-Shirt',34.90,'shirt')">IN DEN WARENKORB</button></article>
+</div>
+</section>
+<div class="cart" id="cart"><h3>DEIN WARENKORB</h3><div id="items">Noch nichts ausgewählt.</div><div class="total" id="total">Gesamt: 0,00 €</div><button class="checkout" onclick="showCheckout()">WEITER ZUR KASSE</button>
+<div class="checkoutbox" id="checkout"><b>Checkout-Demo</b><input placeholder="Vorname"><input placeholder="Nachname"><input placeholder="E-Mail"><input placeholder="Lieferadresse"><button class="checkout" onclick="alert('Demo abgeschlossen. Für echte Zahlungen muss noch ein Zahlungsanbieter angeschlossen werden.')">BESTELLUNG ABSENDEN</button></div></div>
+<footer>DARK FLOW © 2026 · MOVE DIFFERENT.</footer>
+<script>
+let cart=[];
+function add(name,price,id){
+ const size=document.getElementById(id).value;
+ if(size==='Größe wählen'){alert('Bitte zuerst eine Größe auswählen.');return}
+ cart.push({name,price,size}); render(); document.getElementById('cart').style.display='block';
+}
+function render(){
+ document.getElementById('count').textContent=cart.length;
+ document.getElementById('items').innerHTML=cart.length?cart.map((x,i)=>`<div class="item">${x.name} · ${x.size}<br><span class="small">${x.price.toFixed(2).replace('.',',')} €</span></div>`).join(''):'Noch nichts ausgewählt.';
+ let total=cart.reduce((s,x)=>s+x.price,0);
+ document.getElementById('total').textContent='Gesamt: '+total.toFixed(2).replace('.',',')+' €';
+}
+function toggleCart(){let c=document.getElementById('cart');c.style.display=c.style.display==='block'?'none':'block';}
+function showCheckout(){document.getElementById('checkout').style.display='block'}
+</script>
+</body>
+</html>
